@@ -18,10 +18,20 @@ public class DialogueManager : MonoBehaviour {
 		dialogues = new List<Dialogue>();
 		lineNum = 0;
 	}
+
 	void Start(){
 	}
 
-	public void LoadDialogueFile(string fileName, string label, Func<string,string> ReplaceWords,Dictionary<string,int> comparedVariables){
+	void Update(){
+		if ( Input.GetMouseButtonDown(1) ) {
+			LoadDialogueFile ("opening_scene_texts", "", NoReplace, emptyCV);
+		}
+		if ( Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) ) {
+			ToNextLine ();
+		}
+	}
+
+	public void LoadDialogueFile(string fileName, string label, Func<string,string> ReplaceWords, Dictionary<string,int> comparedVariables){
 		TextAsset dialogueTextAsset = Resources.Load<TextAsset> ("Texts/" + fileName);
 		string dialoguesString = dialogueTextAsset.text;
 
@@ -41,7 +51,7 @@ public class DialogueManager : MonoBehaviour {
 		Dialogue dialogue;
 		foreach(string line in dialogueLines) {
 			dialogue = new Dialogue ();
-			dialogue.LoadDialogueLine (line);
+			dialogue.LoadDialogueLine (line, comparedVariables);
 			dialogues.Add (dialogue);
 		}
 
@@ -65,16 +75,6 @@ public class DialogueManager : MonoBehaviour {
 	public void ExecutePresentLine(){
 		dialogues [lineNum].ExecuteDialogue ();
 	}
-	void Update(){
-		if ( Input.GetMouseButtonDown(1) ) {
-			LoadDialogueFile ("opening_scene_texts", "", NoReplace, emptyCV);
-		}
-		if ( Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) ) {
-			ToNextLine ();
-		}
-	}
 
-	private static Func<string, string> NoReplace = (string a) => {
-		return a;
-	};
+	private static Func<string, string> NoReplace = (a => a);
 }

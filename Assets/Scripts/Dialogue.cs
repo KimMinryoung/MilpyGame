@@ -18,7 +18,8 @@ public class Dialogue {
 	private Func<bool> Condition = NullCondition;
 	private Action DontWaitInput = NullDontWaitInput;
 
-	public void LoadDialogueLine(string line){
+	public void LoadDialogueLine(string line, Dictionary<string,int> comparedVariables){
+
 		try{
 			string[] labelParsed = line.Split(']');
 
@@ -81,7 +82,9 @@ public class Dialogue {
 				}
 
 			}
+
 			else if (parts[0] == "=>" || parts[0] == "?"){
+				
 				Branch = () => {
 					Dialogue line_;
 					bool success = false;
@@ -98,13 +101,23 @@ public class Dialogue {
 					}
 					dm.ExecutePresentLine();
 				};
-				if(parts[0]=="?"){
+
+				if(parts[0] == "?"){
 					Condition=()=>{
-						//check condition(parts[1]) using received variables list
-						return false;
+						string compareText = parts[1];
+						string[] tokens = compareText.Split (' ');
+
+						int targetValue = comparedVariables [tokens[0]];
+						string compareSymbol = tokens [1];
+						int referenceValue = Convert.ToInt32 (tokens [2]);
+
+						bool compareResult = Util.Compare (targetValue, referenceValue, compareSymbol);
+						return compareResult;
 					};
 				}
+
 			}
+
 			else{
 				if(parts[0] != ""){
 					NameBox = () =>{
