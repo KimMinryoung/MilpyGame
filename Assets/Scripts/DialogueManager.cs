@@ -7,8 +7,8 @@ public class DialogueManager : MonoBehaviour {
 
 	public static DialogueDisplay dd;
 
-	List<Dialogue> dialogues;
-	int lineNum;
+	public List<Dialogue> dialogues;
+	public int lineNum;
 
 	Dictionary<string, int> emptyCV=new Dictionary<string,int>();
 
@@ -60,6 +60,9 @@ public class DialogueManager : MonoBehaviour {
 			dd.DialogueDisplayClear ();
 			return;
 		}
+		ExecutePresentLine ();
+	}
+	public void ExecutePresentLine(){
 		dialogues [lineNum].ExecuteDialogue ();
 	}
 	void Update(){

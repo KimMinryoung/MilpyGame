@@ -30,7 +30,8 @@ public class Dialogue {
 			}
 			else{
 				label = labelParsed[0].Substring("[".Length);
-				lineWithoutLabel=labelParsed[1];
+				DontWaitInput = TrueDontWaitInput;
+				return;
 			}
 
 			string[] parts = lineWithoutLabel.Split('\\');
@@ -82,11 +83,24 @@ public class Dialogue {
 			}
 			else if (parts[0] == "=>" || parts[0] == "?"){
 				Branch = () => {
-					// find parts[2] and jump to there
+					Dialogue line_;
+					bool success = false;
+					for(int i=0;i<dm.dialogues.Count;i++){
+						line_ = dm.dialogues[i];
+						if(line_.label == parts[2]){
+							dm.lineNum = i;
+							success = true;
+							break;
+						}
+					}
+					if(!success){
+						Debug.Log("label 못 찾아 브랜치 실패");
+					}
+					dm.ExecutePresentLine();
 				};
 				if(parts[0]=="?"){
 					Condition=()=>{
-						//check condition using received variables list
+						//check condition(parts[1]) using received variables list
 						return false;
 					};
 				}
@@ -117,7 +131,7 @@ public class Dialogue {
 				};
 			}
 
-			if(parts[0] == "*" || parts[0] == "=>" || parts[0] == "?"){
+			if(parts[0] == "*"){
 				DontWaitInput = TrueDontWaitInput;
 			}
 
@@ -150,6 +164,8 @@ public class Dialogue {
 		bool result = Condition ();
 		if (result)
 			Branch ();
+		else
+			DontWaitInput = TrueDontWaitInput;
 	}
 
 	private static Action NullNameBox = () => {
@@ -160,9 +176,6 @@ public class Dialogue {
 		dd.nameBox.enabled = false;
 		dd.nameText.text = null;
 	};
-	private static Action NullPortraitBox = () => {
-		dd.portrait.sprite = dd.transparentSprite;
-	};
 	private static Action NullText = () => {
 		//don't change current text
 		//do nothing
@@ -170,6 +183,9 @@ public class Dialogue {
 	private static Action EmptyText = () => {
 		dd.textBox.enabled = false;
 		dd.textText.text = null;
+	};
+	private static Action NullPortraitBox = () => {
+		dd.portrait.sprite = dd.transparentSprite;
 	};
 	private static Action NullEffect = () => {
 		//do nothing
