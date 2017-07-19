@@ -41,6 +41,9 @@ public class Person {
 		statMinLimits [statName] = min;
 	}
 
+	public string GetName(){
+		return name;
+	}
 	public int GetStat (string statName){
 		return stats [statName];
 	}

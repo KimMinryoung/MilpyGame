@@ -16,6 +16,7 @@ public class Dialogue {
 	Action Effect = NullEffect;
 	Action Branch = NullBranch;
 	Func<bool> Condition = NullCondition;
+	Action ChangeValue = NullChangeValue;
 	Action DontWaitInput = NullDontWaitInput;
 
 	public void LoadDialogueLine(string line, Dictionary<string,int> comparedVariables){
@@ -38,10 +39,8 @@ public class Dialogue {
 			string[] parts = lineWithoutLabel.Split('\\');
 
 			if (parts[0] == "*"){
-				
 				string commandType = parts[1];
 				string commandObject = parts[2];
-
 				if(commandType == "사라져"){
 					if(commandObject=="배경"){
 						Effect = () => {
@@ -57,7 +56,6 @@ public class Dialogue {
 						//end bgm
 					}
 				}
-
 				else if(commandType=="배경"){
 					Effect = () => {
 						Sprite sprite=Resources.Load<Sprite>("Backgrounds/"+commandObject);
@@ -79,11 +77,8 @@ public class Dialogue {
 				else{
 					Debug.LogError("undefined effectType : " + parts[1]);
 				}
-
 			}
-
 			else if (parts[0] == "=>" || parts[0] == "?"){
-				
 				Branch = () => {
 					Dialogue line_;
 					bool success = false;
@@ -100,7 +95,6 @@ public class Dialogue {
 					}
 					dm.ExecutePresentLine();
 				};
-
 				if(parts[0] == "?"){
 					Condition=()=>{
 						string compareText = parts[1];
@@ -114,9 +108,14 @@ public class Dialogue {
 						return compareResult;
 					};
 				}
-
 			}
-
+			else if(parts[0] == "+="){
+				string targetStat = parts[1];
+				int change = Convert.ToInt32 (parts[2]);
+				ChangeValue = () => {
+					comparedVariables[targetStat] += change;
+				};
+			}
 			else{
 				if(parts[0] .Length != 0){
 					NameBox = () =>{
@@ -127,10 +126,8 @@ public class Dialogue {
 				else{
 					NameBox = EmptyNameBox;
 				}
-
 				//emotion = stringList[1];
 				//load portrait
-
 				string displayedText = "";
 				string[] textLines=parts[2].Split('|');
 				foreach(string textline in textLines){
@@ -143,7 +140,7 @@ public class Dialogue {
 				};
 			}
 
-			if(parts[0] == "*"){
+			if(parts[0] == "*" || parts[0] == "+="){
 				DontWaitInput = TrueDontWaitInput;
 			}
 
@@ -169,6 +166,7 @@ public class Dialogue {
 		Text ();
 		Effect ();
 		ConditionAndBranch ();
+		ChangeValue ();
 		DontWaitInput ();
 	}
 
@@ -207,6 +205,9 @@ public class Dialogue {
 	};
 	private static Func<bool> NullCondition = () => {//this is called for non-conditioned branch
 		return true;
+	};
+	private static Action NullChangeValue = () => {
+		//do nothing
 	};
 	private static Action NullDontWaitInput = () => {
 		//do nothing

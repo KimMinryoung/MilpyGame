@@ -6,6 +6,7 @@ public class Unit : Person{
 	Person person;
 	public Unit(Person person){
 		this.person = person;
+		this.name = person.GetName();
 		AddStat ("HP", 10 * person.GetStat ("체력"), 0, 10 * person.GetStat ("체력"));
 		AddStat ("MP", 10 * person.GetStat ("마력"), 0, 10 * person.GetStat ("마력"));
 		AddStat ("마법력", 1000, 1, person.GetStat ("마력"));
