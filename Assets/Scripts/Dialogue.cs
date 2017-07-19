@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Dialogue : MonoBehaviour {
+public class Dialogue {
 
 	public static DialogueDisplay dd;
 
@@ -37,26 +37,26 @@ public class Dialogue : MonoBehaviour {
 				
 				string commandType = parts[1];
 				string commandObject = parts[2];
-				if(commandType == "disappear"){
+				if(commandType == "사라져"){
 					//remove object
 				}
-				else if(commandType=="bg"){
+				else if(commandType=="배경"){
 					Effect = () => {
 						Sprite backgroundImage=Resources.Load<Sprite>("Backgrounds/"+commandObject);
 						dd.background.sprite = backgroundImage;
 					};
 				}
-				else if(commandType=="illust"){
+				else if(commandType=="일러"){
 					Effect = () => {
 						Sprite illustImage=Resources.Load<Sprite>("Illusts/"+commandObject);
 						dd.illustObject.GetComponent<Image>().sprite=illustImage;
 						dd.illustObject.GetComponent<RectTransform> ().sizeDelta = illustImage.rect.size;
 					};
 				}
-				else if(commandType=="bgm"){
+				else if(commandType=="배경음"){
 					//load bgm
 				}
-				else if(commandType=="se"){
+				else if(commandType=="효과음"){
 					//load sound effect
 				}
 				else{
@@ -71,7 +71,7 @@ public class Dialogue : MonoBehaviour {
 				if(parts[0]=="?"){
 					Condition=()=>{
 						//check condition using received variables list
-						return true;
+						return false;
 					};
 				}
 			}
@@ -81,6 +81,9 @@ public class Dialogue : MonoBehaviour {
 						dd.nameBox.enabled = true;
 						dd.nameText.text = parts[0];
 					};
+				}
+				else{
+					NameBox = EmptyNameBox;
 				}
 
 				//emotion = stringList[1];
@@ -106,8 +109,11 @@ public class Dialogue : MonoBehaviour {
 	}
 
 	public void LoadMessageLine(string line){
-		dd.textBox.enabled = true;
-		dd.textText.text = line;
+		NameBox = EmptyNameBox;
+		Text = () => {
+			dd.textBox.enabled = true;
+			dd.textText.text = line;
+		};
 	}
 
 	public void ExecuteDialogue(){
@@ -125,16 +131,27 @@ public class Dialogue : MonoBehaviour {
 	}
 
 	private static Action NullNameBox = () => {
-		
-		//no name text, no name box image
+		//don't change current name box
+		//do nothing
+	};
+
+	private static Action EmptyNameBox = () => {
+		dd.nameBox.enabled = false;
+		dd.nameText.text = null;
 	};
 
 	public static Action NullPortraitBox = () => {
-		//portrait=transparent
+		dd.portrait.sprite = dd.transparentSprite;
 	};
 
 	public static Action NullText = () => {
 		//don't change current text
+		//do nothing
+	};
+
+	public static Action EmptyText = () => {
+		dd.textBox.enabled = false;
+		dd.textText.text = null;
 	};
 
 	public static Action NullEffect = () => {
