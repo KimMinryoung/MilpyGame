@@ -10,6 +10,8 @@ public class DialogueManager : MonoBehaviour {
 	List<Dialogue> dialogues;
 	int lineNum;
 
+	Dictionary<string, int> emptyCV=new Dictionary<string,int>();
+
 	void Awake (){
 		dialogues = new List<Dialogue>();
 		lineNum = 0;
@@ -60,7 +62,7 @@ public class DialogueManager : MonoBehaviour {
 	}
 	void Update(){
 		if ( Input.GetMouseButtonDown(1) ) {
-			LoadDialogueFile ("opening_scene_texts", "", NoReplace, null);
+			LoadDialogueFile ("opening_scene_texts", "", NoReplace, emptyCV);
 		}
 		if ( Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) ) {
 			ToNextLine ();
