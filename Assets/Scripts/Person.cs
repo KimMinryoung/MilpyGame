@@ -16,7 +16,7 @@ public class Person {
 		statMinLimits = new Dictionary<string, int> ();
 	}
 	public Person(string name) : this(){
-		name = "코마에다";
+		this.name = "코마에다";
 		AddStat ("체력", 100, 1, 30);
 		AddStat ("정신", 100, 1, 35);
 		AddStat ("민첩", 100, 1, 12);
@@ -46,6 +46,9 @@ public class Person {
 	}
 	public int GetStat (string statName){
 		return stats [statName];
+	}
+	public Dictionary<string, int> GetStats(){
+		return stats;
 	}
 
 	protected string ChangeStat(string targetStat, int change){

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour {
 
-
-
 	void Awake(){
 	}
 	void Start () {

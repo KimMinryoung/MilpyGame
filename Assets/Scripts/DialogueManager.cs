@@ -27,7 +27,7 @@ public class DialogueManager : MonoBehaviour {
 		if ( Input.GetMouseButtonDown(1) ) {
 			LoadDialogueFile ("opening_scene_texts", null, NoReplace, emptyCV);
 		}
-		if ( Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) ) {
+		if ( DuringDialogue() && ( Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) ) ) {
 			ToNextLine ();
 		}
 	}
@@ -82,6 +82,10 @@ public class DialogueManager : MonoBehaviour {
 	}
 	public void ExecutePresentLine(){
 		dialogues [lineNum].ExecuteDialogue ();
+	}
+
+	public bool DuringDialogue(){
+		return dialogues.Count != 0;
 	}
 
 	private static Func<string, string> NoReplace = (a => a);

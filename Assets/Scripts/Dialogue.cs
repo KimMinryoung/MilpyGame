@@ -78,7 +78,7 @@ public class Dialogue {
 					Debug.LogError("undefined effectType : " + parts[1]);
 				}
 			}
-			else if (parts[0] == "=>" || parts[0] == "?"){
+			else if (parts[0] == "->" || parts[0] == "?"){
 				Branch = () => {
 					Dialogue line_;
 					bool success = false;
