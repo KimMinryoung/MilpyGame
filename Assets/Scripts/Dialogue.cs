@@ -10,13 +10,13 @@ public class Dialogue {
 	public static DialogueManager dm;
 
 	private string label = null;
-	public Action NameBox = NullNameBox;
-	public Action PortraitBox = NullPortraitBox;
-	public Action Text = NullText;
-	public Action Effect = NullEffect;
-	public Action Branch = NullBranch;
-	public Func<bool> Condition = NullCondition;
-	public Action DontWaitInput = NullDontWaitInput;
+	private Action NameBox = NullNameBox;
+	private Action PortraitBox = NullPortraitBox;
+	private Action Text = NullText;
+	private Action Effect = NullEffect;
+	private Action Branch = NullBranch;
+	private Func<bool> Condition = NullCondition;
+	private Action DontWaitInput = NullDontWaitInput;
 
 	public void LoadDialogueLine(string line){
 		try{
