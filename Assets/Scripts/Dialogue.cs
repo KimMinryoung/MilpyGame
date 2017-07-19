@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class Dialogue {
 
 	public static DialogueDisplay dd;
+	public static DialogueManager dm;
 
 	private string label = null;
 	public Action NameBox = NullNameBox;
@@ -15,6 +16,7 @@ public class Dialogue {
 	public Action Effect = NullEffect;
 	public Action Branch = NullBranch;
 	public Func<bool> Condition = NullCondition;
+	public Action DontWaitInput = NullDontWaitInput;
 
 	public void LoadDialogueLine(string line){
 		try{
@@ -37,9 +39,23 @@ public class Dialogue {
 				
 				string commandType = parts[1];
 				string commandObject = parts[2];
+
 				if(commandType == "사라져"){
-					//remove object
+					if(commandObject=="배경"){
+						Effect = () => {
+							dd.background.sprite = dd.transparentSprite;
+						};
+					}
+					else if(commandObject=="일러"){
+						Effect = () => {
+							dd.illustObject.GetComponent<Image>().sprite=dd.transparentSprite;
+						};
+					}
+					else if(commandObject=="배경음"){
+						//end bgm
+					}
 				}
+
 				else if(commandType=="배경"){
 					Effect = () => {
 						Sprite backgroundImage=Resources.Load<Sprite>("Backgrounds/"+commandObject);
@@ -100,6 +116,11 @@ public class Dialogue {
 					dd.textText.text = displayedText;
 				};
 			}
+
+			if(parts[0] == "*" || parts[0] == "=>" || parts[0] == "?"){
+				DontWaitInput = TrueDontWaitInput;
+			}
+
 		}
 		catch (Exception e){
 			Debug.LogError("Parse error with " + line);
@@ -122,6 +143,7 @@ public class Dialogue {
 		Text ();
 		Effect ();
 		ConditionAndBranch ();
+		DontWaitInput ();
 	}
 
 	private void ConditionAndBranch(){
@@ -158,5 +180,10 @@ public class Dialogue {
 	private static Func<bool> NullCondition = () => {//this is called for non-conditioned branch
 		return true;
 	};
-
+	private static Action NullDontWaitInput = () => {
+		//do nothing
+	};
+	private static Action TrueDontWaitInput = () => {
+		dm.ToNextLine();
+	};
 }

@@ -13,6 +13,8 @@ public class DialogueManager : MonoBehaviour {
 	Dictionary<string, int> emptyCV=new Dictionary<string,int>();
 
 	void Awake (){
+		Dialogue.dm = this;
+
 		dialogues = new List<Dialogue>();
 		lineNum = 0;
 	}
@@ -51,7 +53,7 @@ public class DialogueManager : MonoBehaviour {
 		lineNum = 0;
 	}
 
-	void ToNextLine(){
+	public void ToNextLine(){
 		lineNum++;
 		if (lineNum >= dialogues.Count) {
 			DialoguesClear ();
