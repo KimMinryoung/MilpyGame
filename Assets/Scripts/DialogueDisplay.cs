@@ -8,15 +8,15 @@ public class DialogueDisplay : MonoBehaviour {
 
 	public Transform manager;
 
-	public Image background;
-	public Transform illustObject;
-	public Image portrait;
-	public Image nameBox;
-	public Text nameText;
-	public Image textBox;
-	public Text textText;
+	private Image background;
+	private Transform illustObject;
+	private Image portrait;
+	private Image nameBox;
+	private Text nameText;
+	private Image textBox;
+	private Text textText;
 
-	public Sprite transparentSprite;
+	private Sprite transparentSprite;
 
 	void Awake () {
 
@@ -49,16 +49,49 @@ public class DialogueDisplay : MonoBehaviour {
 		DialogueDisplayClear ();
 	}
 	public void DialogueDisplayClear(){
-
-		background.sprite = transparentSprite;
-		illustObject.GetComponent<Image>().sprite = transparentSprite;
-		portrait.sprite = transparentSprite;
-
+		RemoveBackgroundSprite ();
+		RemovePortraitSprite ();
+		RemoveIllustSprite ();
+		DisableNameBox ();
+		DisableTextBox ();
+		PutNameText (null);
+		PutTextText (null);
+	}
+	public void DisableNameBox(){
 		nameBox.enabled = false;
+	}
+	public void EnableNameBox(){
+		nameBox.enabled = true;
+	}
+	public void DisableTextBox(){
 		textBox.enabled = false;
-
-		textText.text = null;
-		nameText.text = null;
-
+	}
+	public void EnableTextBox(){
+		textBox.enabled = true;
+	}
+	public void PutNameText(string text){
+		nameText.text = text;
+	}
+	public void PutTextText(string text){
+		textText.text = text;
+	}
+	public void RemoveBackgroundSprite(){
+		PutBackgroundSprite (transparentSprite);
+	}
+	public void PutBackgroundSprite(Sprite sprite){
+		background.sprite = sprite;
+	}
+	public void RemovePortraitSprite(){
+		PutPortraitSprite (transparentSprite);
+	}
+	public void PutPortraitSprite(Sprite sprite){
+		portrait.sprite = sprite;
+	}
+	public void RemoveIllustSprite(){
+		PutIllustSprite (transparentSprite);
+	}
+	public void PutIllustSprite(Sprite sprite){
+		illustObject.GetComponent<Image>().sprite = sprite;
+		illustObject.GetComponent<RectTransform> ().sizeDelta = sprite.rect.size;
 	}
 }

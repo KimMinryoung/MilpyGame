@@ -45,12 +45,12 @@ public class Dialogue {
 				if(commandType == "사라져"){
 					if(commandObject=="배경"){
 						Effect = () => {
-							dd.background.sprite = dd.transparentSprite;
+							dd.RemoveBackgroundSprite();
 						};
 					}
 					else if(commandObject=="일러"){
 						Effect = () => {
-							dd.illustObject.GetComponent<Image>().sprite=dd.transparentSprite;
+							dd.RemoveIllustSprite();
 						};
 					}
 					else if(commandObject=="배경음"){
@@ -60,15 +60,14 @@ public class Dialogue {
 
 				else if(commandType=="배경"){
 					Effect = () => {
-						Sprite backgroundImage=Resources.Load<Sprite>("Backgrounds/"+commandObject);
-						dd.background.sprite = backgroundImage;
+						Sprite sprite=Resources.Load<Sprite>("Backgrounds/"+commandObject);
+						dd.PutBackgroundSprite(sprite);
 					};
 				}
 				else if(commandType=="일러"){
 					Effect = () => {
-						Sprite illustImage=Resources.Load<Sprite>("Illusts/"+commandObject);
-						dd.illustObject.GetComponent<Image>().sprite=illustImage;
-						dd.illustObject.GetComponent<RectTransform> ().sizeDelta = illustImage.rect.size;
+						Sprite sprite=Resources.Load<Sprite>("Illusts/"+commandObject);
+						dd.PutIllustSprite(sprite);
 					};
 				}
 				else if(commandType=="배경음"){
@@ -121,8 +120,8 @@ public class Dialogue {
 			else{
 				if(parts[0] != ""){
 					NameBox = () =>{
-						dd.nameBox.enabled = true;
-						dd.nameText.text = parts[0];
+						dd.EnableNameBox();
+						dd.PutNameText(parts[0]);
 					};
 				}
 				else{
@@ -139,8 +138,8 @@ public class Dialogue {
 				}
 				displayedText = displayedText.Substring(0,displayedText.Length-1);
 				Text = () => {
-					dd.textBox.enabled = true;
-					dd.textText.text = displayedText;
+					dd.EnableTextBox();
+					dd.PutTextText(displayedText);
 				};
 			}
 
@@ -159,8 +158,8 @@ public class Dialogue {
 	public void LoadMessageLine(string line){
 		NameBox = EmptyNameBox;
 		Text = () => {
-			dd.textBox.enabled = true;
-			dd.textText.text = line;
+			dd.EnableTextBox();
+			dd.PutTextText(line);
 		};
 	}
 
@@ -186,19 +185,19 @@ public class Dialogue {
 		//do nothing
 	};
 	private static Action EmptyNameBox = () => {
-		dd.nameBox.enabled = false;
-		dd.nameText.text = null;
+		dd.DisableNameBox();
+		dd.PutNameText(null);
 	};
 	private static Action NullText = () => {
 		//don't change current text
 		//do nothing
 	};
 	private static Action EmptyText = () => {
-		dd.textBox.enabled = false;
-		dd.textText.text = null;
+		dd.DisableTextBox();
+		dd.PutTextText(null);
 	};
 	private static Action NullPortraitBox = () => {
-		dd.portrait.sprite = dd.transparentSprite;
+		dd.RemovePortraitSprite();
 	};
 	private static Action NullEffect = () => {
 		//do nothing
