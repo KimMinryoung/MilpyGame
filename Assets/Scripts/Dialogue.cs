@@ -9,14 +9,14 @@ public class Dialogue {
 	public static DialogueDisplay dd;
 	public static DialogueManager dm;
 
-	private string label = null;
-	private Action NameBox = NullNameBox;
-	private Action PortraitBox = NullPortraitBox;
-	private Action Text = NullText;
-	private Action Effect = NullEffect;
-	private Action Branch = NullBranch;
-	private Func<bool> Condition = NullCondition;
-	private Action DontWaitInput = NullDontWaitInput;
+	string label = null;
+	Action NameBox = NullNameBox;
+	Action PortraitBox = NullPortraitBox;
+	Action Text = NullText;
+	Action Effect = NullEffect;
+	Action Branch = NullBranch;
+	Func<bool> Condition = NullCondition;
+	Action DontWaitInput = NullDontWaitInput;
 
 	public void LoadDialogueLine(string line, Dictionary<string,int> comparedVariables){
 

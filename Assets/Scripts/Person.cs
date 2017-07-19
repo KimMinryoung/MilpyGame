@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Person {
-	string name;
-	private Dictionary<string,int> stats;
-	private Dictionary<string,int> statMaxLimits;
-	private Dictionary<string,int> statMinLimits;
+	protected string name;
+	protected Dictionary<string,int> stats;
+	protected Dictionary<string,int> statMaxLimits;
+	protected Dictionary<string,int> statMinLimits;
 
 	public static DialogueManager dm;
 
 	public Person () {
-		name = "코마에다";
 		stats=new Dictionary<string,int>();
 		statMaxLimits = new Dictionary<string, int> ();
 		statMinLimits = new Dictionary<string, int> ();
+	}
+	public Person(string name) : this(){
+		name = "코마에다";
 		AddStat ("체력", 100, 1, 30);
 		AddStat ("정신", 100, 1, 35);
 		AddStat ("민첩", 100, 1, 12);
@@ -28,18 +30,22 @@ public class Person {
 		AddStat ("애정", 100, 0, 0);
 	}
 
-	public void AddStat(string statName, int max, int min){
+	protected void AddStat(string statName, int max, int min){
 		stats [statName] = min;
 		statMaxLimits [statName] = max;
 		statMinLimits [statName] = min;
 	}
-	public void AddStat(string statName, int max, int min, int value){
+	protected void AddStat(string statName, int max, int min, int value){
 		stats [statName] = value;
 		statMaxLimits [statName] = max;
 		statMinLimits [statName] = min;
 	}
 
-	public string ChangeStat(string targetStat, int change){
+	public int GetStat (string statName){
+		return stats [statName];
+	}
+
+	protected string ChangeStat(string targetStat, int change){
 		int prevStat = stats [targetStat];
 		stats [targetStat] += change;
 		MakeStatInLimit (targetStat);

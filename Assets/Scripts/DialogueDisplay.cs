@@ -8,15 +8,15 @@ public class DialogueDisplay : MonoBehaviour {
 
 	public Transform manager;
 
-	private Image background;
-	private Transform illustObject;
-	private Image portrait;
-	private Image nameBox;
-	private Text nameText;
-	private Image textBox;
-	private Text textText;
+	Image background;
+	Transform illustObject;
+	Image portrait;
+	Image nameBox;
+	Text nameText;
+	Image textBox;
+	Text textText;
 
-	private Sprite transparentSprite;
+	Sprite transparentSprite;
 
 	void Awake () {
 
