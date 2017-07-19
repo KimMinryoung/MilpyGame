@@ -6,6 +6,7 @@ using UnityEngine;
 public class Util {
 
 	public static System.Random rnd=new System.Random(DateTime.Now.Millisecond);
+
 	public static string PPIGA(string noun){
 		int last = noun [noun.Length - 1];
 		if (last >= '가' && last <= '힣') {
@@ -22,12 +23,14 @@ public class Util {
 				return noun + "가";
 		}
 	}
+
 	public static double Max(double a,double b){
 		return System.Math.Max (a, b);
 	}
 	public static double Min(double a,double b){
 		return System.Math.Min (a, b);
 	}
+
 	public static bool Compare(int target, int reference, string compareSymbol){
 		if (compareSymbol == "==")
 			return target == reference;
@@ -45,7 +48,5 @@ public class Util {
 			Debug.Log ("이상한 compare symbol 입니다");
 			return true;
 		}
-
 	}
-
 }

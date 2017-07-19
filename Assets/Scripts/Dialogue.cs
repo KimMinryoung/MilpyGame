@@ -118,7 +118,7 @@ public class Dialogue {
 			}
 
 			else{
-				if(parts[0] != ""){
+				if(parts[0] .Length != 0){
 					NameBox = () =>{
 						dd.EnableNameBox();
 						dd.PutNameText(parts[0]);
@@ -192,10 +192,10 @@ public class Dialogue {
 		//don't change current text
 		//do nothing
 	};
-	private static Action EmptyText = () => {
+	/*private static Action EmptyText = () => {
 		dd.DisableTextBox();
 		dd.PutTextText(null);
-	};
+	};*/
 	private static Action NullPortraitBox = () => {
 		dd.RemovePortraitSprite();
 	};

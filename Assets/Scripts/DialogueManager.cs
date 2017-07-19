@@ -14,6 +14,7 @@ public class DialogueManager : MonoBehaviour {
 
 	void Awake (){
 		Dialogue.dm = this;
+		Person.dm = this;
 
 		dialogues = new List<Dialogue>();
 		lineNum = 0;
@@ -24,7 +25,7 @@ public class DialogueManager : MonoBehaviour {
 
 	void Update(){
 		if ( Input.GetMouseButtonDown(1) ) {
-			LoadDialogueFile ("opening_scene_texts", "", NoReplace, emptyCV);
+			LoadDialogueFile ("opening_scene_texts", null, NoReplace, emptyCV);
 		}
 		if ( Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) ) {
 			ToNextLine ();
@@ -35,7 +36,7 @@ public class DialogueManager : MonoBehaviour {
 		TextAsset dialogueTextAsset = Resources.Load<TextAsset> ("Texts/" + fileName);
 		string dialoguesString = dialogueTextAsset.text;
 
-		if (label != "") {
+		if (label != null) {
 			label = "{" + label + "}";
 			string[] parts = dialoguesString.Split (new string[] { label }, StringSplitOptions.RemoveEmptyEntries);
 			if (parts.Length < 2) {
@@ -55,7 +56,14 @@ public class DialogueManager : MonoBehaviour {
 			dialogues.Add (dialogue);
 		}
 
-		dialogues [0].ExecuteDialogue ();
+		if(lineNum == 0)
+			ExecutePresentLine();
+	}
+
+	public void LoadMessageLine(string line){
+		Dialogue dialogue = new Dialogue ();
+		dialogue.LoadMessageLine (line);
+		dialogues.Add (dialogue);
 	}
 
 	private void DialoguesClear(){
