@@ -21,6 +21,7 @@ public class DialogueDisplay : MonoBehaviour {
 	void Awake () {
 
 		Dialogue.dd = this;
+		DialogueManager.dd = this;
 
 		if (!manager)
 			manager=GameObject.Find ("DialogueManager").GetComponent<Transform>();
@@ -38,22 +39,26 @@ public class DialogueDisplay : MonoBehaviour {
 
 		transparentSprite = Resources.Load<Sprite> ("UIImages/transparent");
 
-		background.sprite = transparentSprite;
-		illustObject.GetComponent<Image>().sprite = transparentSprite;
-		portrait.sprite = transparentSprite;
-
 		if (!nameText)
 			nameText=manager.Find ("NameText").GetComponent<Text>();
 		if (!textText)
 			textText=manager.Find ("TextText").GetComponent<Text>();
-		textText.text = null;
-		nameText.text = null;
+		
 	}
 	void Start(){
+		DialogueDisplayClear ();
+	}
+	public void DialogueDisplayClear(){
 
-		Dialogue test = new Dialogue ();
-		test.LoadDialogueLine("밀피\\\\내 이름은 밀피.|장점이라곤 운이 좋다는 것뿐인 인간이다.");
-		test.ExecuteDialogue ();
+		background.sprite = transparentSprite;
+		illustObject.GetComponent<Image>().sprite = transparentSprite;
+		portrait.sprite = transparentSprite;
+
+		nameBox.enabled = false;
+		textBox.enabled = false;
+
+		textText.text = null;
+		nameText.text = null;
 
 	}
 }

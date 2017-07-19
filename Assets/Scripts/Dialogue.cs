@@ -134,35 +134,28 @@ public class Dialogue {
 		//don't change current name box
 		//do nothing
 	};
-
 	private static Action EmptyNameBox = () => {
 		dd.nameBox.enabled = false;
 		dd.nameText.text = null;
 	};
-
-	public static Action NullPortraitBox = () => {
+	private static Action NullPortraitBox = () => {
 		dd.portrait.sprite = dd.transparentSprite;
 	};
-
-	public static Action NullText = () => {
+	private static Action NullText = () => {
 		//don't change current text
 		//do nothing
 	};
-
-	public static Action EmptyText = () => {
+	private static Action EmptyText = () => {
 		dd.textBox.enabled = false;
 		dd.textText.text = null;
 	};
-
-	public static Action NullEffect = () => {
+	private static Action NullEffect = () => {
 		//do nothing
 	};
-
-	public static Action NullBranch = () => {
+	private static Action NullBranch = () => {
 		//do nothing
 	};
-
-	public static Func<bool> NullCondition = () => {//this is called for non-conditioned branch
+	private static Func<bool> NullCondition = () => {//this is called for non-conditioned branch
 		return true;
 	};
 
