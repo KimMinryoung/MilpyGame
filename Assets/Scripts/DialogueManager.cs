@@ -56,7 +56,7 @@ public class DialogueManager : MonoBehaviour {
 			dialogues.Add (dialogue);
 		}
 
-		if(lineNum == 0)
+		if (lineNum == 0)
 			ExecutePresentLine();
 	}
 
@@ -64,6 +64,9 @@ public class DialogueManager : MonoBehaviour {
 		Dialogue dialogue = new Dialogue ();
 		dialogue.LoadMessageLine (line);
 		dialogues.Add (dialogue);
+
+		if(lineNum == 0)
+			ExecutePresentLine();
 	}
 
 	private void DialoguesClear(){
@@ -71,16 +74,24 @@ public class DialogueManager : MonoBehaviour {
 		lineNum = 0;
 	}
 
-	public void ToNextLine(){
-		lineNum++;
+	private bool LineOver(){
 		if (lineNum >= dialogues.Count) {
 			DialoguesClear ();
 			dd.DialogueDisplayClear ();
-			return;
+			return true;
 		}
+		else
+			return false;
+	}
+	public void ToNextLine(){
+		lineNum++;
+		if (LineOver ())
+			return;
 		ExecutePresentLine ();
 	}
 	public void ExecutePresentLine(){
+		if (LineOver ())
+			return;
 		dialogues [lineNum].ExecuteDialogue ();
 	}
 

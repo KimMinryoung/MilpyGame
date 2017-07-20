@@ -92,6 +92,8 @@ public class Dialogue {
 					}
 					if(!success){
 						Debug.Log("label 못 찾아 브랜치 실패");
+						DontWaitInput = TrueDontWaitInput;
+						return;
 					}
 					dm.ExecutePresentLine();
 				};
