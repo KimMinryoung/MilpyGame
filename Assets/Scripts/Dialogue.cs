@@ -53,7 +53,9 @@ public class Dialogue {
 						};
 					}
 					else if(commandObject=="배경음"){
-						//end bgm
+						Effect = () => {
+							SoundManager.instance.EndBGM();
+						};
 					}
 				}
 				else if(commandType=="배경"){
@@ -69,10 +71,14 @@ public class Dialogue {
 					};
 				}
 				else if(commandType=="배경음"){
-					//load bgm
+					Effect = () => {
+						SoundManager.instance.PlayBGM(commandObject);
+					};
 				}
 				else if(commandType=="효과음"){
-					//load sound effect
+					Effect = () => {
+						SoundManager.instance.PlaySE(commandObject);
+					};
 				}
 				else{
 					Debug.LogError("undefined effectType : " + parts[1]);
