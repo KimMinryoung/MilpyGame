@@ -16,7 +16,7 @@ public class Person {
 		statMinLimits = new Dictionary<string, int> ();
 	}
 	public Person(string name) : this(){
-		this.name = "멜";
+		this.name = "바올리";
 		AddStat ("체력", 100, 1, 30);
 		AddStat ("정신", 100, 1, 35);
 		AddStat ("민첩", 100, 1, 12);
