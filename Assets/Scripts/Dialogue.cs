@@ -38,126 +38,164 @@ public class Dialogue {
 
 			string[] parts = lineWithoutLabel.Split('\\');
 
-			if (parts[0] == "*"){
+			string dtype = parts[0];
+
+			if (dtype == "*"){
 				string commandType = parts[1];
 				string commandObject = parts[2];
-				if(commandType == "사라져"){
-					if(commandObject=="배경"){
-						Effect = () => {
-							dd.RemoveBackgroundSprite();
-						};
-					}
-					else if(commandObject=="일러"){
-						Effect = () => {
-							dd.RemoveIllustSprite();
-						};
-					}
-					else if(commandObject=="배경음"){
-						Effect = () => {
-							SoundManager.instance.EndBGM();
-						};
-					}
-				}
-				else if(commandType=="배경"){
-					Effect = () => {
-						Sprite sprite=Resources.Load<Sprite>("Backgrounds/"+commandObject);
-						dd.PutBackgroundSprite(sprite);
-					};
-				}
-				else if(commandType=="일러"){
-					Effect = () => {
-						Sprite sprite=Resources.Load<Sprite>("Illusts/"+commandObject);
-						dd.PutIllustSprite(sprite);
-					};
-				}
-				else if(commandType=="배경음"){
-					Effect = () => {
-						SoundManager.instance.PlayBGM(commandObject);
-					};
-				}
-				else if(commandType=="효과음"){
-					Effect = () => {
-						SoundManager.instance.PlaySE(commandObject);
-					};
-				}
-				else{
-					Debug.LogError("undefined effectType : " + parts[1]);
+				LoadEffectCommand(commandType, commandObject);
+			}
+			else if (dtype == "->" || dtype == "?"){
+				string label = parts[2];
+				LoadBranch(label);
+				if(dtype == "?"){
+					string compareText = parts[1];
+					LoadCondition(compareText, comparedVariables);
 				}
 			}
-			else if (parts[0] == "->" || parts[0] == "?"){
-				Branch = () => {
-					Dialogue line_;
-					bool success = false;
-					for(int i=0;i<dm.dialogues.Count;i++){
-						line_ = dm.dialogues[i];
-						if(line_.label == parts[2]){
-							dm.lineNum = i;
-							success = true;
-							break;
-						}
-					}
-					if(!success){
-						Debug.Log("label 못 찾아 브랜치 실패");
-						DontWaitInput = TrueDontWaitInput;
-						return;
-					}
-					dm.ExecutePresentLine();
-				};
-				if(parts[0] == "?"){
-					Condition=()=>{
-						string compareText = parts[1];
-						string[] tokens = compareText.Split (' ');
-
-						int targetValue = comparedVariables [tokens[0]];
-						string compareSymbol = tokens [1];
-						int referenceValue = Convert.ToInt32 (tokens [2]);
-
-						bool compareResult = Util.Compare (targetValue, referenceValue, compareSymbol);
-						return compareResult;
-					};
-				}
-			}
-			else if(parts[0] == "+="){
+			else if(dtype == "+="){
 				string targetStat = parts[1];
-				int change = Convert.ToInt32 (parts[2]);
-				ChangeValue = () => {
-					comparedVariables[targetStat] += change;
-				};
+				int addedValue = Convert.ToInt32 (parts[2]);
+				LoadAddValue(targetStat, addedValue, comparedVariables);
 			}
 			else{
-				if(parts[0] .Length != 0){
-					NameBox = () =>{
-						dd.EnableNameBox();
-						dd.PutNameText(parts[0]);
-					};
+				string name=dtype;
+				if(name.Length != 0){
+					LoadNameBox(name);
 				}
 				else{
 					NameBox = EmptyNameBox;
 				}
-				//emotion = stringList[1];
+				//emotion = parts[1];
 				//load portrait
-				string displayedText = "";
-				string[] textLines=parts[2].Split('|');
-				foreach(string textline in textLines){
-					displayedText += textline+"\n";
-				}
-				displayedText = displayedText.Substring(0,displayedText.Length-1);
-				Text = () => {
-					dd.EnableTextBox();
-					dd.PutTextText(displayedText);
-				};
+				string dialogueText=parts[2];
+				LoadTextBox(dialogueText);
 			}
 
-			if(parts[0] == "*" || parts[0] == "+="){
+			if(dtype == "*" || dtype == "+="){
 				DontWaitInput = TrueDontWaitInput;
 			}
-
 		}
 		catch (Exception e){
 			Debug.LogError("Parse error with " + line);
 			Debug.LogException(e);
 			throw e;
 		}
+	}
+
+	private void LoadEffectCommand(string commandType,string commandObject){
+		if(commandType == "사라져"){
+			LoadEffectDisappear (commandObject);
+		}
+		else if(commandType=="배경"){
+			LoadEffectBackground (commandObject);
+		}
+		else if(commandType=="일러"){
+			LoadEffectIllust (commandObject);
+		}
+		else if(commandType=="배경음"){
+			LoadEffectBGM (commandObject);
+		}
+		else if(commandType=="효과음"){
+			LoadEffectSE (commandObject);
+		}
+		else{
+			Debug.LogError("undefined effectType : " + commandType);
+		}
+	}
+	private void LoadEffectDisappear(string commandObject){
+		if(commandObject=="배경"){
+			Effect = () => {
+				dd.RemoveBackgroundSprite();
+			};
+		}
+		else if(commandObject=="일러"){
+			Effect = () => {
+				dd.RemoveIllustSprite();
+			};
+		}
+		else if(commandObject=="배경음"){
+			Effect = () => {
+				SoundManager.instance.EndBGM();
+			};
+		}
+	}
+	private void LoadEffectBackground(string commandObject){
+		Effect = () => {
+			Sprite sprite=Resources.Load<Sprite>("Backgrounds/"+commandObject);
+			dd.PutBackgroundSprite(sprite);
+		};
+	}
+	private void LoadEffectIllust(string commandObject){
+		Effect = () => {
+			Sprite sprite=Resources.Load<Sprite>("Illusts/"+commandObject);
+			dd.PutIllustSprite(sprite);
+		};
+	}
+	private void LoadEffectBGM(string commandObject){
+		Effect = () => {
+			SoundManager.instance.PlayBGM(commandObject);
+		};
+	}
+	private void LoadEffectSE(string commandObject){
+		Effect = () => {
+			SoundManager.instance.PlaySE(commandObject);
+		};
+	}
+	private void LoadBranch(string destinyLabel){
+		Branch = () => {
+			bool success = false;
+			Dialogue line_;
+			for(int i=0;i<dm.dialogues.Count;i++){
+				line_ = dm.dialogues[i];
+				if(line_.label == destinyLabel){
+					dm.lineNum = i;
+					success = true;
+					break;
+				}
+			}
+			if(!success){
+				Debug.Log("label '"+destinyLabel+"' 못 찾아 브랜치 실패");
+				DontWaitInput = TrueDontWaitInput;
+				return;
+			}
+			dm.ExecutePresentLine();
+		};
+	}
+	private void LoadCondition(string compareText, Dictionary<string, int> comparedVariables){
+		Condition=()=>{
+			string[] tokens = compareText.Split (' ');
+
+			int targetValue = comparedVariables [tokens[0]];
+			string compareSymbol = tokens [1];
+			int referenceValue = Convert.ToInt32 (tokens [2]);
+
+			bool compareResult = Util.Compare (targetValue, referenceValue, compareSymbol);
+			return compareResult;
+		};
+	}
+	private void LoadAddValue(string targetStat, int addedValue, Dictionary<string, int> comparedVariables){
+		ChangeValue = () => {
+			comparedVariables[targetStat] += addedValue;
+		};
+	}
+	private void LoadNameBox(string name){
+		NameBox = () =>{
+			dd.EnableNameBox();
+			dd.PutNameText(name);
+		};
+	}
+	private void LoadTextBox(string dialogueText){
+		string displayedText = "";
+		string[] textLines=dialogueText.Split('|');
+		foreach(string textline in textLines){
+			displayedText += textline+"\n";
+		}
+		displayedText = displayedText.Substring(0,displayedText.Length-1);
+		Text = () => {
+			dd.EnableTextBox();
+			dd.PutTextText(displayedText);
+		};
 	}
 
 	public void LoadMessageLine(string line){
