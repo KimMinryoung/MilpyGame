@@ -13,21 +13,26 @@ public class TortureManager {
 	public static GameObject SmallButton;
 
 	public static void InitiateTorture () {
+		GetGameManagerInstances ();
+		LoadTortureData ();
+		CreateTortureButtons ();
+	}
+	private static void GetGameManagerInstances(){
 		prisoners = GameManager.prisoners;
-		Canvas = GameManager.Canvas;
-		SmallButton = GameManager.gameManager.SmallButton;
-
+		SmallButton = GameManager.Instance.SmallButton;
+	}
+	private static void LoadTortureData(){
 		TextAsset textDataFile = Resources.Load<TextAsset>("Texts/"+"torture_texts");
 		string textDataString = textDataFile.text;
 		string[] textDataLines = textDataString.Split (new string[] { "\r\n" },StringSplitOptions.RemoveEmptyEntries);
-
 		tortures = new Dictionary<string, Torture> ();
 		foreach(string line in textDataLines) {
 			string[] textEntry = line.Split (',');
 			Torture torture = new Torture (textEntry);
 			tortures [torture.name] = torture;
 		}
-
+	}
+	private static void CreateTortureButtons(){
 		int y = 600;
 		foreach(var pair in tortures) {
 			GameObject button = MonoBehaviour.Instantiate (SmallButton,new Vector3(300,y,0),Quaternion.identity,Canvas.transform);

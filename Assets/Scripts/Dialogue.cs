@@ -87,6 +87,9 @@ public class Dialogue {
 		if(commandType == "사라져"){
 			LoadEffectDisappear (commandObject);
 		}
+		else if(commandType=="스크립트"){
+			LoadEffectScript (commandObject);
+		}
 		else if(commandType=="배경"){
 			LoadEffectBackground (commandObject);
 		}
@@ -116,9 +119,14 @@ public class Dialogue {
 		}
 		else if(commandObject=="배경음"){
 			Effect = () => {
-				SoundManager.instance.EndBGM();
+				SoundManager.Instance.EndBGM();
 			};
 		}
+	}
+	private void LoadEffectScript(string commandObject){
+		Effect = () => {
+			dm.LoadDialogueFile(commandObject, null, DialogueManager.NoReplace, DialogueManager.emptyCV);
+		};
 	}
 	private void LoadEffectBackground(string commandObject){
 		Effect = () => {
@@ -134,12 +142,12 @@ public class Dialogue {
 	}
 	private void LoadEffectBGM(string commandObject){
 		Effect = () => {
-			SoundManager.instance.PlayBGM(commandObject);
+			SoundManager.Instance.PlayBGM(commandObject);
 		};
 	}
 	private void LoadEffectSE(string commandObject){
 		Effect = () => {
-			SoundManager.instance.PlaySE(commandObject);
+			SoundManager.Instance.PlaySE(commandObject);
 		};
 	}
 	private void LoadBranch(string destinyLabel){

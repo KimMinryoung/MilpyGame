@@ -49,4 +49,14 @@ public class Util {
 			return true;
 		}
 	}
+
+	public static string AValueOfSomethingChangedMessage(int change, string changedObject, string possessor){
+		string message = null;
+		if (change > 0) {
+			message = (possessor + "의 " + Util.PPIGA (changedObject) + " " + change + " 올랐다.");
+		} else if (change < 0) {
+			message = (possessor + "의 " + Util.PPIGA (changedObject) + " " + -change + " 떨어졌다.");
+		}
+		return message;
+	}
 }

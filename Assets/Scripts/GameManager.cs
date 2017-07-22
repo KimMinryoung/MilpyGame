@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-	public static List<Person> prisoners;
-
-	public static GameManager gameManager;
+	private static GameManager instance;
+	public static GameManager Instance {
+		get { return instance; }
+	}
 	public static GameObject Canvas;
 	public GameObject SmallButton;
 
+	public static Dictionary<string, int> mainIntegers;
+	public static List<Person> prisoners;
+
 	void Awake () {
-		gameManager = this;
+		instance = this;
 
 		//dialogueManager = GameObject.Find ("DialogueManager").GetComponent<DialogueManager> ();
 		//battleManager = GameObject.Find ("GameManager").GetComponent<BattleManager> ();

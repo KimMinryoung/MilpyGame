@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour {
 	AudioSource SoundPlayer;
-	public static SoundManager instance;
+	private static SoundManager instance;
+	public static  SoundManager Instance {
+		get { return instance; }
+	}
 
 	void Awake(){
 		if (SoundManager.instance == null)

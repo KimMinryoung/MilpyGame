@@ -23,7 +23,7 @@ public class DialogueManager : MonoBehaviour {
 
 	void Update(){
 		if ( Input.GetMouseButtonDown(1) ) {
-			LoadDialogueFile ("opening_scene_texts", null, NoReplace, emptyCV);
+			LoadDialogueFile ("Scene#0", null, NoReplace, emptyCV);
 		}
 		if ( DuringDialogue() && ( Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Return) ) ) {
 			ToNextLine ();

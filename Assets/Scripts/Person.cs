@@ -51,18 +51,12 @@ public class Person {
 		return stats;
 	}
 
-	protected string ChangeStat(string targetStat, int change){
+	protected string ChangeStatAndGetMessage(string targetStat, int change){
 		int prevStat = stats [targetStat];
 		stats [targetStat] += change;
 		MakeStatInLimit (targetStat);
 		int realChange = stats [targetStat] - prevStat;
-
-		string message = null;
-		if (realChange > 0) {
-			message = (name + "의 " + Util.PPIGA (targetStat) + " " + realChange + " 올랐다.");
-		} else if (realChange < 0) {
-			message = (name + "의 " + Util.PPIGA (targetStat) + " " + -realChange + " 떨어졌다.");
-		}
+		string message = Util.AValueOfSomethingChangedMessage (realChange, targetStat, name);
 		return message;
 	}
 
@@ -70,7 +64,7 @@ public class Person {
 		List<string> messages=new List<string>();
 		string message;
 		foreach(var statChange in statChangesList){
-			message = ChangeStat (statChange.Key, statChange.Value);
+			message = ChangeStatAndGetMessage (statChange.Key, statChange.Value);
 			if (message != null)
 				messages.Add (message);
 		}
