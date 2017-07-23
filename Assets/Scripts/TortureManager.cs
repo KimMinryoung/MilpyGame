@@ -7,10 +7,10 @@ using UnityEngine.UI;
 public class TortureManager {
 
 	public static Dictionary<string, Torture> tortures;
-	public static List<Person> prisoners;
+	public static Dictionary<string, Person> prisoners;
 
 	public static GameObject Canvas;
-	public static GameObject SmallButton;
+	private static GameObject SmallButton;
 
 	public static void InitiateTorture () {
 		GetGameManagerInstances ();
@@ -33,12 +33,14 @@ public class TortureManager {
 		}
 	}
 	private static void CreateTortureButtons(){
+		int x = 300;
 		int y = 600;
+		int ySpace = 50;
 		foreach(var pair in tortures) {
-			GameObject button = MonoBehaviour.Instantiate (SmallButton,new Vector3(300,y,0),Quaternion.identity,Canvas.transform);
-			y -= 50;
+			GameObject button = MonoBehaviour.Instantiate (SmallButton,new Vector3(x,y,0),Quaternion.identity,Canvas.transform);
+			y -= ySpace;
 			button.transform.Find ("SmallButtonText").GetComponent<Text> ().text = pair.Key;
-			button.GetComponent<Button>().onClick.AddListener(() => pair.Value.tortureAction(prisoners[0]));
+			button.GetComponent<Button>().onClick.AddListener(() => pair.Value.tortureAction(prisoners["바올리"]));
 		}
 	}
 }

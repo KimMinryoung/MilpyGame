@@ -16,18 +16,26 @@ public class Person {
 		statMinLimits = new Dictionary<string, int> ();
 	}
 	public Person(string name) : this(){
-		this.name = "바올리";
-		AddStat ("체력", 100, 1, 30);
-		AddStat ("정신", 100, 1, 35);
-		AddStat ("민첩", 100, 1, 12);
-		AddStat ("마력", 100, 1, 50);
-		AddStat ("지능", 100, 1, 65);
-		AddStat ("행운", 100, 1, 80);
+		this.name = name;
+		AddStat ("체력", 100, 1, 1);
+		AddStat ("정신", 100, 1, 1);
+		AddStat ("민첩", 100, 1, 1);
+		AddStat ("마력", 100, 1, 1);
+		AddStat ("지능", 100, 1, 1);
+		AddStat ("행운", 100, 1, 1);
 		AddStat ("혐오", 100, 0, 0);
 		AddStat ("복종", 100, 0, 0);
 		AddStat ("공포", 100, 0, 0);
 		AddStat ("광기", 100, 0, 0);
 		AddStat ("애정", 100, 0, 0);
+	}
+	public Person(string name,int a,int b,int c, int d,int e,int f) : this(name){
+		stats ["체력"] = a;
+		stats ["정신"] = b;
+		stats ["민첩"] = c;
+		stats ["마력"] = d;
+		stats ["지능"] = e;
+		stats ["행운"] = f;
 	}
 
 	protected void AddStat(string statName, int max, int min){
@@ -50,6 +58,10 @@ public class Person {
 	public Dictionary<string, int> GetStats(){
 		return stats;
 	}
+	public Sprite GetSprite(){
+		Sprite sprite=Resources.Load<Sprite>("Portraits/"+name);
+		return sprite;
+	}
 
 	protected string ChangeStatAndGetMessage(string targetStat, int change){
 		int prevStat = stats [targetStat];
@@ -60,7 +72,7 @@ public class Person {
 		return message;
 	}
 
-	public void ChangeStats(Dictionary<string, int> statChangesList){
+	public void ChangeStatsAndAddMessages(Dictionary<string, int> statChangesList){
 		List<string> messages=new List<string>();
 		string message;
 		foreach(var statChange in statChangesList){

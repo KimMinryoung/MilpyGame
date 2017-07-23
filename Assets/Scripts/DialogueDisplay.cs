@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DialogueDisplay : MonoBehaviour {
+	private static DialogueDisplay instance;
+	public static DialogueDisplay Instance {
+		get { return instance; }
+	}
 
 	public Transform manager;
 
@@ -19,6 +23,7 @@ public class DialogueDisplay : MonoBehaviour {
 	Sprite transparentSprite;
 
 	void Awake () {
+		instance = this;
 
 		Dialogue.dd = this;
 		DialogueManager.dd = this;
@@ -49,7 +54,6 @@ public class DialogueDisplay : MonoBehaviour {
 		DialogueDisplayClear ();
 	}
 	public void DialogueDisplayClear(){
-		RemoveBackgroundSprite ();
 		RemovePortraitSprite ();
 		RemoveIllustSprite ();
 		DisableNameBox ();
@@ -78,20 +82,32 @@ public class DialogueDisplay : MonoBehaviour {
 	public void RemoveBackgroundSprite(){
 		PutBackgroundSprite (transparentSprite);
 	}
-	public void PutBackgroundSprite(Sprite sprite){
+	private void PutBackgroundSprite(Sprite sprite){
 		background.sprite = sprite;
+	}
+	public void PutBackgroundSprite(String name){
+		Sprite sprite=Resources.Load<Sprite>("Backgrounds/"+name);
+		PutBackgroundSprite(sprite);
 	}
 	public void RemovePortraitSprite(){
 		PutPortraitSprite (transparentSprite);
 	}
-	public void PutPortraitSprite(Sprite sprite){
+	private void PutPortraitSprite(Sprite sprite){
 		portrait.sprite = sprite;
+	}
+	public void PutPortraitSprite(String name){
+		Sprite sprite=Resources.Load<Sprite>("Portraits/"+name);
+		PutPortraitSprite(sprite);
 	}
 	public void RemoveIllustSprite(){
 		PutIllustSprite (transparentSprite);
 	}
-	public void PutIllustSprite(Sprite sprite){
+	private void PutIllustSprite(Sprite sprite){
 		illustObject.GetComponent<Image>().sprite = sprite;
 		illustObject.GetComponent<RectTransform> ().sizeDelta = sprite.rect.size;
+	}
+	public void PutIllustSprite(String name){
+		Sprite sprite=Resources.Load<Sprite>("Illusts/"+name);
+		PutIllustSprite(sprite);
 	}
 }

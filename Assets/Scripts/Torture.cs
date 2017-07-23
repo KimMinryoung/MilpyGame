@@ -22,7 +22,7 @@ public class Torture {
 			Func<string,string> Replace = (origin)=>{ return origin.Replace("{이름}",subject.GetName()); };
 			//string fileName, string label, Func<string,string> ReplaceWords, Dictionary<string,int> comparedVariables
 			Dialogue.dm.LoadDialogueFile("torture_dialogue_texts", name, Replace, subject.GetStats());
-			subject.ChangeStats (statChanges);
+			subject.ChangeStatsAndAddMessages (statChanges);
 		};
 	}
 }

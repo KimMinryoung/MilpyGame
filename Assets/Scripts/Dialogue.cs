@@ -130,14 +130,12 @@ public class Dialogue {
 	}
 	private void LoadEffectBackground(string commandObject){
 		Effect = () => {
-			Sprite sprite=Resources.Load<Sprite>("Backgrounds/"+commandObject);
-			dd.PutBackgroundSprite(sprite);
+			dd.PutBackgroundSprite(commandObject);
 		};
 	}
 	private void LoadEffectIllust(string commandObject){
 		Effect = () => {
-			Sprite sprite=Resources.Load<Sprite>("Illusts/"+commandObject);
-			dd.PutIllustSprite(sprite);
+			dd.PutIllustSprite(commandObject);
 		};
 	}
 	private void LoadEffectBGM(string commandObject){
