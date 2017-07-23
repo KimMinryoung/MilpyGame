@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+//using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Unit : Person{
 	Person person;
+	private GameObject unitButton;
+	private static GameObject StatBar;
+	public List<Slider> StatBars;
+
 	public Unit(Person person){
 		this.person = person;
 		this.name = person.GetName();
@@ -14,5 +20,43 @@ public class Unit : Person{
 		AddStat ("저항력", 1000, 1, person.GetStat ("정신"));
 		AddStat ("순발력", 1000, 1, person.GetStat ("민첩"));
 		AddStat ("운", 100, 1, person.GetStat ("행운"));
+		StatBars=new List<Slider>();
+	}
+
+	public static void GetGameManagerInstances(){
+		StatBar = GameManager.Instance.StatBar;
+	}
+	public void SetUnitButton(GameObject unitButton){
+		this.unitButton = unitButton;
+	}
+	public void CreateHPAndMPStatBars (){
+		List<string> statNames = new List<string> ();
+		statNames.Add ("HP");
+		statNames.Add ("MP");
+		CreateStatBars (statNames);
+	}
+	private void CreateStatBars (List<string> statNames) {
+		DestroyStatBars ();
+		int y = 100;
+		foreach(string statName in statNames){
+			CreateStatBar (statName, stats[statName], statMaxLimits[statName], y);
+			y -= 30;
+		}
+	}
+	private void CreateStatBar(string name, int stat, int statMaxLimit, int y){
+		GameObject statBarObject = MonoBehaviour.Instantiate (StatBar,unitButton.transform);
+		statBarObject.transform.Translate(new Vector3 (0, y, 0));
+		Slider statBar = statBarObject.GetComponent<Slider>();
+		StatBars.Add (statBar);
+		statBar.value = (float)stat / (float)statMaxLimit;
+		statBarObject.transform.Find ("Text").GetComponent<Text>().text = name;
+	}
+	public void DestroyStatBars () {
+		if (StatBars == null)
+			return;
+		foreach (var statBar in StatBars) {
+			MonoBehaviour.Destroy (statBar);
+		}
+		StatBars.Clear ();
 	}
 }

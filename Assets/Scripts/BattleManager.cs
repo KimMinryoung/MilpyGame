@@ -28,13 +28,18 @@ public class BattleManager {
 		DialogueDisplay.Instance.PutBackgroundSprite ("Blue");
 	}
 	private static void CreateUnitButtons(){
-		int x = 100;
-		int y = 600;
+		int x = -500;
+		int y = 250;
 		int ySpace = 200;
 		foreach(var pair in units) {
-			GameObject button = MonoBehaviour.Instantiate (ImageButton,new Vector3(x, y, 0),Quaternion.identity,Canvas.transform);
+			Unit unit = pair.Value;
+			GameObject button = MonoBehaviour.Instantiate (ImageButton,Canvas.transform);
+			button.transform.Translate (new Vector3 (x, y, 0));
+			unit.SetUnitButton (button);
 			button.GetComponent<Image> ().sprite = pair.Value.GetSprite ();
 			y -= ySpace;
+
+			unit.CreateHPAndMPStatBars ();
 			//button.GetComponent<Button>().onClick.AddListener(() => pair.Value.tortureAction(prisoners["바올리"]));
 		}
 	}

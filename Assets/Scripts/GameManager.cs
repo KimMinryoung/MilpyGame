@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
 	public static GameObject Canvas;
 	public GameObject SmallButton;
 	public GameObject ImageButton;
+	public GameObject StatBar;
 
 	public static Dictionary<string, int> mainIntegers;
 
@@ -25,6 +26,9 @@ public class GameManager : MonoBehaviour {
 		Canvas = GameObject.FindGameObjectWithTag ("Canvas");
 		TortureManager.Canvas = Canvas;
 		BattleManager.Canvas = Canvas;
+
+
+		Unit.GetGameManagerInstances ();
 	}
 
 	void Start(){
