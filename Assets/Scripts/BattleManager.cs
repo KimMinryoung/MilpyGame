@@ -77,7 +77,7 @@ public class BattleManager {
 		button.GetComponent<Image> ().sprite = unit.GetSprite ();
 
 		unit.CreateHPAndMPStatBars ();
-		button.GetComponent<Button>().onClick.AddListener(() => unit.GetMagics()[0].Cast(unit, unit) );
+		button.GetComponent<Button>().onClick.AddListener(() => unit.CastMagic(unit.GetMagics()[0], unit) );
 	}
 	void Update () {
 		

@@ -28,6 +28,10 @@ public class Unit : Person{
 		StatBars=new Dictionary<string, Slider>();
 	}
 
+	public void CastMagic(Magic magic, Unit target){
+		magic.Cast (this, target);
+	}
+
 	public static void GetGameManagerInstances(){
 		StatBar = GameManager.Instance.StatBar;
 	}
