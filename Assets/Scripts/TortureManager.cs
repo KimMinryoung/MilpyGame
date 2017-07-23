@@ -33,14 +33,13 @@ public class TortureManager {
 		}
 	}
 	private static void CreateTortureButtons(){
-		int x = 300;
-		int y = 600;
+		int x = -300;
+		int y = 200;
 		int ySpace = 50;
 		foreach(var pair in tortures) {
-			GameObject button = MonoBehaviour.Instantiate (SmallButton,new Vector3(x,y,0),Quaternion.identity,Canvas.transform);
+			GameObject button;
+			button = Util.CreateButton (SmallButton, Canvas.transform, x, y, pair.Key, () => pair.Value.tortureAction (prisoners ["바올리"]));
 			y -= ySpace;
-			button.transform.Find ("SmallButtonText").GetComponent<Text> ().text = pair.Key;
-			button.GetComponent<Button>().onClick.AddListener(() => pair.Value.tortureAction(prisoners["바올리"]));
 		}
 	}
 }

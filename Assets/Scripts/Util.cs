@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Util {
 
@@ -58,5 +59,13 @@ public class Util {
 			message = (possessor + "의 " + Util.PPIGA (changedObject) + " " + -change + " 떨어졌다.");
 		}
 		return message;
+	}
+
+	public static GameObject CreateButton(GameObject prefab, Transform parent, int x, int y, string text, UnityEngine.Events.UnityAction triggeredAction){
+		GameObject button = MonoBehaviour.Instantiate (prefab, parent);
+		button.transform.Translate (new Vector3 (x, y, 0));
+		button.transform.Find ("Text").GetComponent<Text> ().text = text;
+		button.GetComponent<Button>().onClick.AddListener(triggeredAction);
+		return button;
 	}
 }

@@ -27,13 +27,16 @@ public class GameManager : MonoBehaviour {
 		TortureManager.Canvas = Canvas;
 		BattleManager.Canvas = Canvas;
 
-
 		Unit.GetGameManagerInstances ();
 	}
 
 	void Start(){
 		persons = new Dictionary<string, Person> ();
 		prisoners = new Dictionary<string, Person> ();
+
+
+		Magic.CreateAllMagics ();
+
 		/*
 		stats ["체력"] = a;
 		stats ["정신"] = b;
@@ -46,8 +49,7 @@ public class GameManager : MonoBehaviour {
 		persons ["밀피"] = new Person ("밀피", 7, 70, 3, 20, 15, 100);
 		persons ["바올리"] = new Person ("바올리", 60, 50, 30, 50, 10, 80);
 		prisoners ["바올리"] = persons ["바올리"];
-
-		//TortureManager.InitiateTorture ();
-		BattleManager.InitiateBattle();
+		TortureManager.InitiateTorture ();
+		//BattleManager.InitiateBattle();
 	}
 }

@@ -9,6 +9,7 @@ public class Person {
 	protected Dictionary<string,int> statMaxLimits;
 	protected Dictionary<string,int> statMinLimits;
 	protected Dictionary<string, Slider> StatBars;
+	protected List<Magic> magics;
 
 	public static DialogueManager dm;
 
@@ -16,6 +17,7 @@ public class Person {
 		stats=new Dictionary<string,int>();
 		statMaxLimits = new Dictionary<string, int> ();
 		statMinLimits = new Dictionary<string, int> ();
+		StatBars = new Dictionary<string, Slider> ();
 	}
 	public Person(string name) : this(){
 		this.name = name;
@@ -30,6 +32,9 @@ public class Person {
 		AddStat ("공포", 100, 0, 0);
 		AddStat ("광기", 100, 0, 0);
 		AddStat ("애정", 100, 0, 0);
+		magics = new List<Magic> ();
+		magics.Add(Magic.magics["평타"]);
+		magics.Add(Magic.magics["강타"]);
 	}
 	public Person(string name,int a,int b,int c, int d,int e,int f) : this(name){
 		stats ["체력"] = a;
@@ -59,6 +64,9 @@ public class Person {
 	}
 	public Dictionary<string, int> GetStats(){
 		return stats;
+	}
+	public List<Magic> GetMagics(){
+		return magics;
 	}
 	public Sprite GetSprite(){
 		Sprite sprite=Resources.Load<Sprite>("Portraits/"+name);

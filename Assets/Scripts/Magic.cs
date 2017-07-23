@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Magic{
+	public static Dictionary<string, Magic> magics;
 	public string name;
 	private static Action<Unit> NullConsumeMP = (unit) => {};
 	Action<Unit> ConsumeMP = NullConsumeMP;
@@ -11,6 +12,13 @@ public class Magic{
 	Func<Unit, Unit, int> GetDamage = NullGetDamage;
 	private static Action<Unit, int> NullDoTheDamage = (target, damage) => {};
 	Action<Unit, int> DoTheDamage = NullDoTheDamage;
+
+	public static void CreateAllMagics(){
+		magics = new Dictionary<string, Magic> ();
+		magics["평타"] = new Magic("평타",0);
+		magics["강타"] = new Magic("강타",30);
+	}
+
 	public Magic(string name, int MPconsumption){
 		this.name = name;
 		ConsumeMP = (Unit caster) => {

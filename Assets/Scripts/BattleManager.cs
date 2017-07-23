@@ -71,15 +71,10 @@ public class BattleManager {
 		}
 	}
 	private static void CreateUnitButton(Unit unit, int x,int y){
-		GameObject button = MonoBehaviour.Instantiate (ImageButton,Canvas.transform);
-		button.transform.Translate (new Vector3 (x, y, 0));
+		GameObject button;
+		button = Util.CreateButton (ImageButton, Canvas.transform, x, y, null, () => unit.CastMagic (unit.GetMagics () [0], unit));
 		unit.SetUnitButton (button);
 		button.GetComponent<Image> ().sprite = unit.GetSprite ();
-
 		unit.CreateHPAndMPStatBars ();
-		button.GetComponent<Button>().onClick.AddListener(() => unit.CastMagic(unit.GetMagics()[0], unit) );
-	}
-	void Update () {
-		
 	}
 }

@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class Unit : Person{
 	Person person;
-	List<Magic> magics;
 	public enum Sides { Ally, Enemy };
 	Sides side;
 	private GameObject unitButton;
@@ -23,8 +22,8 @@ public class Unit : Person{
 		AddStat ("순발력", 1000, 1, person.GetStat ("민첩"));
 		AddStat ("운", 100, 1, person.GetStat ("행운"));
 
-		magics = new List<Magic> ();
-		magics.Add(new Magic("평타",30));
+		magics = person.GetMagics();
+
 		StatBars=new Dictionary<string, Slider>();
 	}
 
@@ -44,7 +43,10 @@ public class Unit : Person{
 	public void SetSide(Sides side){
 		this.side = side;
 	}
-	public List<Magic> GetMagics(){
+	new public string GetName(){
+		return name;
+	}
+	new public List<Magic> GetMagics(){
 		return magics;
 	}
 	public void CreateHPAndMPStatBars (){
