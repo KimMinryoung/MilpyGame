@@ -12,6 +12,7 @@ public class BattleManager {
 
 	public static void InitiateBattle (){
 		GetGameManagerInstances ();
+
 		units = new List<Unit> ();
 		List<string> allyUnits = new List<string> ();
 		List<string> enemyUnits = new List<string> ();
@@ -76,7 +77,7 @@ public class BattleManager {
 		button.GetComponent<Image> ().sprite = unit.GetSprite ();
 
 		unit.CreateHPAndMPStatBars ();
-		//button.GetComponent<Button>().onClick.AddListener(() => pair.Value.tortureAction(prisoners["바올리"]));
+		button.GetComponent<Button>().onClick.AddListener(() => unit.GetMagics()[0].Cast(unit, unit) );
 	}
 	void Update () {
 		

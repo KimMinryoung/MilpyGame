@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Person {
 	protected string name;
 	protected Dictionary<string,int> stats;
 	protected Dictionary<string,int> statMaxLimits;
 	protected Dictionary<string,int> statMinLimits;
+	protected Dictionary<string, Slider> StatBars;
 
 	public static DialogueManager dm;
 
@@ -63,10 +65,26 @@ public class Person {
 		return sprite;
 	}
 
-	protected string ChangeStatAndGetMessage(string targetStat, int change){
+	protected void SetStatBarValue(Slider statBar, string name){
+		statBar.maxValue = statMaxLimits[name];
+		statBar.value = stats [name];
+	}
+	protected void UpdateStatBar(string name){
+		if(StatBars.ContainsKey(name))
+			SetStatBarValue (StatBars [name], name);
+	}
+	protected void PutStatBarNameText(Slider statBar){
+		statBar.maxValue = statMaxLimits[name];
+		statBar.value = stats [name];
+	}
+
+	protected string ChangeStatAndUpdateStatBarAndGetMessage(string targetStat, int change){
 		int prevStat = stats [targetStat];
 		stats [targetStat] += change;
 		MakeStatInLimit (targetStat);
+
+		UpdateStatBar (targetStat);
+
 		int realChange = stats [targetStat] - prevStat;
 		string message = Util.AValueOfSomethingChangedMessage (realChange, targetStat, name);
 		return message;
@@ -76,7 +94,7 @@ public class Person {
 		List<string> messages=new List<string>();
 		string message;
 		foreach(var statChange in statChangesList){
-			message = ChangeStatAndGetMessage (statChange.Key, statChange.Value);
+			message = ChangeStatAndUpdateStatBarAndGetMessage (statChange.Key, statChange.Value);
 			if (message != null)
 				messages.Add (message);
 		}
