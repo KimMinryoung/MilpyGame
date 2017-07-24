@@ -8,7 +8,6 @@ public class UnitUI : MonoBehaviour
 	Unit unit;
 	private GameObject unitButton;
 	Dictionary<string, Slider> statBars;
-
 	private static GameObject StatBar;
 
 	void Awake(){
@@ -54,5 +53,11 @@ public class UnitUI : MonoBehaviour
 			yield return new WaitForSeconds (0.05f);
 			statBar.value = ((stepNum - i) * prevValue + i * destinyValue) / stepNum;
 		}
+	}
+	public void DestroyAll(){
+		foreach (var statBar in statBars) {
+			Destroy (statBar.Value.gameObject);
+		}
+		Destroy (this.gameObject);
 	}
 }

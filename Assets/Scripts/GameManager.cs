@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour {
 		//battleManager = GameObject.Find ("GameManager").GetComponent<BattleManager> ();
 
 		Canvas = GameObject.FindGameObjectWithTag ("Canvas");
-		TortureManager.Canvas = Canvas;
+		TortureUI.Canvas = Canvas;
 		BattleManager.Canvas = Canvas;
 	}
 
@@ -42,11 +42,15 @@ public class GameManager : MonoBehaviour {
 		stats ["지능"] = e;
 		stats ["행운"] = f;*/
 		persons ["젠"] = new Person ("젠", 30, 30, 20, 20, 50, 20);
+		persons ["젠"].AddMagic ("평타");
 		persons ["아이리스"] = new Person ("아이리스", 15, 5, 10, 25, 70, 10);
+		persons ["아이리스"].AddMagic ("강타");
 		persons ["밀피"] = new Person ("밀피", 7, 70, 3, 20, 15, 100);
+		persons ["밀피"].AddMagic ("평타");
 		persons ["바올리"] = new Person ("바올리", 60, 50, 30, 50, 10, 80);
+		persons ["바올리"].AddMagic ("강타");
 		prisoners ["바올리"] = persons ["바올리"];
-		//TortureManager.InitiateTorture ();
+		//TortureManager.Instance.InitiateTorture ();
 		BattleManager.Instance.InitiateBattle();
 	}
 }

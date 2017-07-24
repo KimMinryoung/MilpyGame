@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DialogueManager : MonoBehaviour {
+	private static DialogueManager instance;
+	public static DialogueManager Instance {
+		get { return instance; }
+	}
 
 	public static DialogueDisplay dd;
 
@@ -11,6 +15,7 @@ public class DialogueManager : MonoBehaviour {
 	public int lineNum;
 
 	void Awake (){
+		instance = this;
 		Dialogue.dm = this;
 		Person.dm = this;
 

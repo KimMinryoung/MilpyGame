@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour {
-	public static BattleManager instance = null;
+	public static BattleManager instance;
 	public static BattleManager Instance {
 		get { return instance; }
 	}
@@ -147,6 +147,33 @@ public class BattleManager : MonoBehaviour {
 	}
 	void EndUnitBehave(Unit unit){
 		unit.SetActivation (Unit.Activation.AlreadyBehaved);
+		KillZeroHPUnits ();
+		if (CheckBattleEndAndExecuteEnding ()) {
+			return;
+		}
+		CheckTurnEnd ();
+	}
+	void KillZeroHPUnits(){
+		for (int i=units.Count-1;i>=0;i--){
+			Unit unit = units [i];
+			if (unit.GetStat ("HP") == 0) {
+				unit.Die ();
+				units.Remove (unit);
+			}
+		}
+	}
+	bool CheckBattleEndAndExecuteEnding(){
+		if (NoEnemyLeft ()) {
+			WinBattle ();
+			return true;
+		}
+		if (NoAllyLeft ()) {
+			LoseBattle ();
+			return true;
+		}
+		return false;
+	}
+	void CheckTurnEnd(){
 		if (CheckNoAllyBehaveLeft ()) {
 			EndAllyTurn ();
 		}
@@ -154,6 +181,14 @@ public class BattleManager : MonoBehaviour {
 	void DeactivateUnitBehave(Unit unit){
 		unit.SetActivation (Unit.Activation.Deactivated);
 		//unit.unitUI.GetUnitButton ().GetComponent<Button> ().interactable = false;
+	}
+	void WinBattle(){
+		DialogueManager.Instance.LoadMessageLine ("전투 승리");
+		// win battle!!!!!!!!
+	}
+	void LoseBattle(){
+		DialogueManager.Instance.LoadMessageLine ("전투 패배");
+		// lose battle!!!!!!!!
 	}
 	List<Unit> GetAllyUnits(){
 		IEnumerable<Unit> allyUnits =

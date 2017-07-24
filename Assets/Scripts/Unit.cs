@@ -84,4 +84,7 @@ public class Unit : Person{
 		ChangeStat (targetStat, change);
 		unitUI.UpdateStatBar (targetStat, prevStat);
 	}
+	public void Die(){
+		unitUI.DestroyAll ();
+	}
 }
