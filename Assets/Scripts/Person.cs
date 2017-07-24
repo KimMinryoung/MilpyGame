@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Person {
+public class Person{
 	protected string name;
 	protected Dictionary<string,int> stats;
 	protected Dictionary<string,int> statMaxLimits;
 	protected Dictionary<string,int> statMinLimits;
-	protected Dictionary<string, Slider> StatBars;
+	protected Dictionary<string, Slider> statBars;
 	protected List<Magic> magics;
 
 	public static DialogueManager dm;
@@ -17,7 +17,7 @@ public class Person {
 		stats=new Dictionary<string,int>();
 		statMaxLimits = new Dictionary<string, int> ();
 		statMinLimits = new Dictionary<string, int> ();
-		StatBars = new Dictionary<string, Slider> ();
+		statBars = new Dictionary<string, Slider> ();
 	}
 	public Person(string name) : this(){
 		this.name = name;
@@ -65,6 +65,9 @@ public class Person {
 	public Dictionary<string, int> GetStats(){
 		return stats;
 	}
+	public Dictionary<string, int> GetStatMaxLimits(){
+		return statMaxLimits;
+	}
 	public List<Magic> GetMagics(){
 		return magics;
 	}
@@ -73,51 +76,34 @@ public class Person {
 		return sprite;
 	}
 
-	protected void SetStatBarValue(Slider statBar, string name){
-		statBar.maxValue = statMaxLimits[name];
-		statBar.value = stats [name];
-	}
-	protected void UpdateStatBar(string name){
-		if(StatBars.ContainsKey(name))
-			SetStatBarValue (StatBars [name], name);
-	}
-	protected void PutStatBarNameText(Slider statBar){
-		statBar.maxValue = statMaxLimits[name];
-		statBar.value = stats [name];
-	}
-
-	private void ChangeStat(string targetStat, int change){
+	protected void ChangeStat(string targetStat, int change){
 		stats [targetStat] += change;
 		MakeStatInLimit (targetStat);
 	}
-	private void ChangeStatAndUpdateStatBar(string targetStat, int change){
+	private string ChangeStatAndGetMessage(string targetStat, int change){
 		int prevStat = stats [targetStat];
 		ChangeStat (targetStat, change);
-		UpdateStatBar (targetStat);
-	}
-	private string ChangeStatAndUpdateStatBarAndGetMessage(string targetStat, int change){
-		int prevStat = stats [targetStat];
-		ChangeStat (targetStat, change);
-		UpdateStatBar (targetStat);
 		int realChange = stats [targetStat] - prevStat;
 		string message = Util.AValueOfSomethingChangedMessage (realChange, targetStat, name);
 		return message;
 	}
-	public void ChangeStats(Dictionary<string, int> statChangesList){
+	public void ChangeStatsWithoutMessages(Dictionary<string, int> statChangesList){
 		List<string> messages=new List<string>();
 		foreach(var statChange in statChangesList){
-			ChangeStatAndUpdateStatBar (statChange.Key, statChange.Value);
+			ChangeStat (statChange.Key, statChange.Value);
 		}
 	}
 	public void ChangeStatsAndAddMessages(Dictionary<string, int> statChangesList){
 		List<string> messages=new List<string>();
 		string message;
 		foreach(var statChange in statChangesList){
-			message = ChangeStatAndUpdateStatBarAndGetMessage (statChange.Key, statChange.Value);
+			message = ChangeStatAndGetMessage (statChange.Key, statChange.Value);
 			if (message != null)
 				messages.Add (message);
 		}
-
+		LoadDoubleMessages (messages);
+	}
+	protected void LoadDoubleMessages(List<string> messages){
 		string doubleMessage;
 		int i;
 		for(i = 0 ; i + 1 < messages.Count ; i += 2){

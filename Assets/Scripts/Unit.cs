@@ -10,8 +10,7 @@ public class Unit : Person{
 	Sides side;
 	public enum Activation { Behaveable, AlreadyBehaved, Deactivated };
 	Activation activation;
-	private GameObject unitButton;
-	private static GameObject StatBar;
+	public UnitUI unitUI;
 
 	public Unit(Person person){
 		this.person = person;
@@ -25,31 +24,28 @@ public class Unit : Person{
 		AddStat ("운", 100, 1, person.GetStat ("행운"));
 
 		magics = person.GetMagics();
-
-		StatBars=new Dictionary<string, Slider>();
 	}
 
 	public void CastMagic(Magic magic, Unit target){
 		magic.Cast (this, target);
 	}
-
-	public static void GetGameManagerInstances(){
-		StatBar = GameManager.Instance.StatBar;
-	}
-	public void SetUnitButton(GameObject unitButton){
-		this.unitButton = unitButton;
-	}
-	public GameObject GetUnitButton(){
-		return unitButton;
-	}
 	public Sides GetSide(){
 		return side;
+	}
+	public bool IsAlly(){
+		return side == Sides.Ally;
+	}
+	public bool IsEnemy(){
+		return side == Sides.Enemy;
 	}
 	public void SetSide(Sides side){
 		this.side = side;
 	}
 	public Activation GetActivation(){
 		return activation;
+	}
+	public bool IsBehaveable(){
+		return activation == Activation.Behaveable;
 	}
 	public void SetActivation(Activation activation){
 		this.activation = activation;
@@ -64,31 +60,28 @@ public class Unit : Person{
 		List<string> statNames = new List<string> ();
 		statNames.Add ("HP");
 		statNames.Add ("MP");
-		CreateStatBars (statNames);
+		unitUI.CreateStatBars (statNames);
 	}
-	private void CreateStatBars (List<string> statNames) {
-		//DestroyStatBars ();
-		int y = 100;
-		foreach(string statName in statNames){
-			CreateStatBar (statName, y);
-			y -= 30;
+	new public void ChangeStatsAndAddMessages(Dictionary<string, int> statChangesList){
+		List<string> messages=new List<string>();
+		string message;
+		foreach(var statChange in statChangesList){
+			message = ChangeStatAndGetMessage (statChange.Key, statChange.Value);
+			if (message != null)
+				messages.Add (message);
 		}
+		LoadDoubleMessages (messages);
 	}
-	private void CreateStatBar(string name,  int y){
-		GameObject statBarObject = MonoBehaviour.Instantiate (StatBar,unitButton.transform);
-		statBarObject.transform.Translate(new Vector3 (0, y, 0));
-		Slider statBar = statBarObject.GetComponent<Slider>();
-		StatBars[name] = statBar;
-		SetStatBarValue(statBar, name);
-		statBarObject.transform.Find ("Text").GetComponent<Text>().text = name;
+	private string ChangeStatAndGetMessage(string targetStat, int change){
+		int prevStat = stats [targetStat];
+		ChangeStatAndUpdateStatBar (targetStat, change);
+		int realChange = stats [targetStat] - prevStat;
+		string message = Util.AValueOfSomethingChangedMessage (realChange, targetStat, name);
+		return message;
 	}
-	/*
-	public void DestroyStatBars () {
-		if (StatBars == null)
-			return;
-		foreach (var statBar in StatBars) {
-			MonoBehaviour.Destroy (statBar);
-		}
-		StatBars.Clear ();
-	}*/
+	private void ChangeStatAndUpdateStatBar(string targetStat, int change){
+		int prevStat = stats [targetStat];
+		ChangeStat (targetStat, change);
+		unitUI.UpdateStatBar (targetStat, prevStat);
+	}
 }

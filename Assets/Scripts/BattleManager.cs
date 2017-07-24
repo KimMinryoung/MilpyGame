@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BattleManager {
+public class BattleManager : MonoBehaviour {
+	public static BattleManager instance = null;
+	public static BattleManager Instance {
+		get { return instance; }
+	}
 	public static List<Unit> units;
 
 	public static GameObject Canvas;
@@ -16,7 +20,12 @@ public class BattleManager {
 	static Unit selectedUnit = null;
 	static Magic selectedBehaviour = null;
 
-	public static void InitiateBattle (){
+	void Awake(){
+		instance = this;
+	}
+
+	public void InitiateBattle (){
+
 		GetGameManagerInstances ();
 
 		state = State.Base;
@@ -33,21 +42,21 @@ public class BattleManager {
 
 		StartAllyTurn ();
 	}
-	private static void GetGameManagerInstances(){
+	void GetGameManagerInstances(){
 		ImageButton = GameManager.Instance.ImageButton;
 		SmallButton = GameManager.Instance.SmallButton;
 	}
-	private static void LoadUnitsOfSides(List<string> unitNames, Unit.Sides side){
+	void LoadUnitsOfSides(List<string> unitNames, Unit.Sides side){
 		foreach (string name in unitNames) {
 			Unit unit = new Unit (GameManager.persons [name]);
 			units.Add (unit);
 			unit.SetSide (side);
 		}
 	}
-	private static void PutBackground(){
+	void PutBackground(){
 		DialogueDisplay.Instance.PutBackgroundSprite ("Blue");
 	}
-	private static void CreateUnitButtons(){
+	void CreateUnitButtons(){
 		int x, y;
 		int ySpace = 200;
 
@@ -74,11 +83,11 @@ public class BattleManager {
 			y -= ySpace;
 		}
 	}
-	private static void CreateUnitButton(Unit unit, int x,int y){
+	void CreateUnitButton(Unit unit, int x,int y){
 		GameObject button;
 		button = Util.CreateButton (ImageButton, Canvas.transform, x, y, null, () => { 
 			if(state == State.Base){
-				if(unit.GetSide() == Unit.Sides.Ally){
+				if(unit.IsAlly() && unit.IsBehaveable()){
 					state = State.ClickedUnit;
 					selectedUnit = unit;
 					CreateBehaviourButtons(unit, x+230, y); 
@@ -91,14 +100,17 @@ public class BattleManager {
 				EndUnitBehave(selectedUnit);
 			}
 		} );
-		unit.SetUnitButton (button);
+		button.AddComponent<UnitUI> ();
+		unit.unitUI = button.GetComponent<UnitUI> ();
+		unit.unitUI.SetUnit (unit);
+		unit.unitUI.SetUnitButton (button);
 		button.GetComponent<Image> ().sprite = unit.GetSprite ();
 		unit.CreateHPAndMPStatBars ();
 	}
 
 	static List<GameObject> behaviourButtons;
 
-	private static void CreateBehaviourButtons(Unit unit, int x,int y){
+	void CreateBehaviourButtons(Unit unit, int x,int y){
 		behaviourButtons = new List<GameObject> ();
 		int ySpace = 50;
 		foreach(Magic magic in unit.GetMagics()) {
@@ -111,64 +123,62 @@ public class BattleManager {
 			y -= ySpace;
 		}
 	}
-	private static void DestroyBehaviourButtons(){
+	void DestroyBehaviourButtons(){
 		foreach (var button in behaviourButtons) {
 			MonoBehaviour.Destroy (button);
 		}
 	}
 
-	private static void StartAllyTurn(){	
+	void StartAllyTurn(){
 		List<Unit> allyUnits = GetAllyUnits ();
 		foreach (var unit in allyUnits) {
 			LetUnitBehave (unit);
 		}
 	}
-	private static bool CheckNoAllyBehaveLeft(){
+	bool CheckNoAllyBehaveLeft(){
 		bool noAllyLeft = true;
 		List<Unit> allyUnits = GetAllyUnits ();
 		foreach (var unit in allyUnits) {
-			if (unit.GetActivation () == Unit.Activation.Behaveable)
+			if (unit.IsBehaveable())
 				noAllyLeft = false;
 		}
 		return noAllyLeft;
 	}
-	private static void EndAllyTurn(){
+	void EndAllyTurn(){
 		StartAllyTurn ();
 	}
 
-	private static void LetUnitBehave(Unit unit){
+	void LetUnitBehave(Unit unit){
 		unit.SetActivation (Unit.Activation.Behaveable);
-		unit.GetUnitButton ().GetComponent<Button> ().interactable = true;
 	}
-	private static void EndUnitBehave(Unit unit){
+	void EndUnitBehave(Unit unit){
 		unit.SetActivation (Unit.Activation.AlreadyBehaved);
-		unit.GetUnitButton ().GetComponent<Button> ().interactable = false;
 		if (CheckNoAllyBehaveLeft ()) {
 			EndAllyTurn ();
 		}
 	}
-	private static void DeactivateUnitBehave(Unit unit){
+	void DeactivateUnitBehave(Unit unit){
 		unit.SetActivation (Unit.Activation.Deactivated);
-		unit.GetUnitButton ().GetComponent<Button> ().interactable = false;
+		//unit.unitUI.GetUnitButton ().GetComponent<Button> ().interactable = false;
 	}
-	private static List<Unit> GetAllyUnits(){
+	List<Unit> GetAllyUnits(){
 		IEnumerable<Unit> allyUnits =
 			from unit in units
-				where unit.GetSide() ==Unit.Sides.Ally
+				where unit.IsAlly()
 			select unit;
 		return allyUnits.ToList();
 	}
-	private static List<Unit> GetEnemyUnits(){
+	List<Unit> GetEnemyUnits(){
 		IEnumerable<Unit> enemyUnits =
 			from unit in units
-				where unit.GetSide() ==Unit.Sides.Enemy
+				where unit.IsEnemy()
 			select unit;
 		return enemyUnits.ToList();
 	}
-	private static bool NoAllyLeft(){
+	bool NoAllyLeft(){
 		return GetAllyUnits().Count ==  0;
 	}
-	private static bool NoEnemyLeft(){
+	bool NoEnemyLeft(){
 		return GetEnemyUnits().Count ==  0;
 	}
 }

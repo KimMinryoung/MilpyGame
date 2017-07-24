@@ -26,8 +26,6 @@ public class GameManager : MonoBehaviour {
 		Canvas = GameObject.FindGameObjectWithTag ("Canvas");
 		TortureManager.Canvas = Canvas;
 		BattleManager.Canvas = Canvas;
-
-		Unit.GetGameManagerInstances ();
 	}
 
 	void Start(){
@@ -49,6 +47,6 @@ public class GameManager : MonoBehaviour {
 		persons ["바올리"] = new Person ("바올리", 60, 50, 30, 50, 10, 80);
 		prisoners ["바올리"] = persons ["바올리"];
 		//TortureManager.InitiateTorture ();
-		BattleManager.InitiateBattle();
+		BattleManager.Instance.InitiateBattle();
 	}
 }
