@@ -15,11 +15,11 @@ public class Magic{
 
 	public static void CreateAllMagics(){
 		magics = new Dictionary<string, Magic> ();
-		magics["평타"] = new Magic("평타",0);
-		magics["강타"] = new Magic("강타",30);
+		magics["평타"] = new Magic("평타",0, 2.0);
+		magics["강타"] = new Magic("강타",30,5.0);
 	}
 
-	public Magic(string name, int MPconsumption){
+	public Magic(string name, int MPconsumption, double powerFactor){
 		this.name = name;
 		ConsumeMP = (Unit caster) => {
 			Dictionary<string, int> MPChange=new Dictionary<string, int>();
@@ -27,7 +27,7 @@ public class Magic{
 			caster.ChangeStatsAndAddMessages(MPChange);
 		};
 		GetDamage = (Unit caster, Unit target) => {
-			int power = 2 * caster.GetStat ("마법력");
+			double power = powerFactor * caster.GetStat ("마법력");
 			int damage = (int)Util.Max (1, power - target.GetStat ("저항력"));
 			return damage;
 		};

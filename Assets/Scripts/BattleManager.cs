@@ -25,7 +25,6 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	public void InitiateBattle (){
-
 		GetGameManagerInstances ();
 
 		state = State.Base;
@@ -61,9 +60,7 @@ public class BattleManager : MonoBehaviour {
 		int ySpace = 200;
 
 		List<Unit> allyUnits = GetAllyUnits ();
-
 		int allyUnitsNum = allyUnits.Count();
-
 		x = -500;
 		y = 250;
 		foreach (Unit unit in allyUnits) {
@@ -71,11 +68,8 @@ public class BattleManager : MonoBehaviour {
 			y -= ySpace;
 		}
 
-
 		List<Unit> enemyUnits = GetEnemyUnits ();
-
 		int enemyUnitsNum = enemyUnits.Count();
-
 		x = 500;
 		y = 250;
 		foreach (Unit unit in enemyUnits) {

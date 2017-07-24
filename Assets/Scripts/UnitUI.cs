@@ -43,14 +43,12 @@ public class UnitUI : MonoBehaviour
 	}
 
 	public void UpdateStatBar(string name, int prevStat){
-		Debug.Log ("Update stat bar " + name);
 		if(statBars.ContainsKey(name))
 			StartCoroutine(SetStatBarValue (statBars [name], name, prevStat));
 	}
 	protected IEnumerator SetStatBarValue(Slider statBar, string name, int prevValue){
 		statBar.maxValue = unit.GetStatMaxLimits() [name];
 		int destinyValue = unit.GetStats() [name];
-		Debug.Log ("Set stat bar " + name+" "+prevValue+" to "+destinyValue);
 		int stepNum = 10;
 		for (int i = 1; i <= stepNum; i++) {
 			yield return new WaitForSeconds (0.05f);

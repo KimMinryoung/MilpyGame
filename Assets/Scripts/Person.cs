@@ -8,7 +8,6 @@ public class Person{
 	protected Dictionary<string,int> stats;
 	protected Dictionary<string,int> statMaxLimits;
 	protected Dictionary<string,int> statMinLimits;
-	protected Dictionary<string, Slider> statBars;
 	protected List<Magic> magics;
 
 	public static DialogueManager dm;
@@ -17,7 +16,6 @@ public class Person{
 		stats=new Dictionary<string,int>();
 		statMaxLimits = new Dictionary<string, int> ();
 		statMinLimits = new Dictionary<string, int> ();
-		statBars = new Dictionary<string, Slider> ();
 	}
 	public Person(string name) : this(){
 		this.name = name;
