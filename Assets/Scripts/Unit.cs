@@ -8,6 +8,8 @@ public class Unit : Person{
 	Person person;
 	public enum Sides { Ally, Enemy };
 	Sides side;
+	public enum Activation { Behaveable, AlreadyBehaved, Deactivated };
+	Activation activation;
 	private GameObject unitButton;
 	private static GameObject StatBar;
 
@@ -37,11 +39,20 @@ public class Unit : Person{
 	public void SetUnitButton(GameObject unitButton){
 		this.unitButton = unitButton;
 	}
+	public GameObject GetUnitButton(){
+		return unitButton;
+	}
 	public Sides GetSide(){
 		return side;
 	}
 	public void SetSide(Sides side){
 		this.side = side;
+	}
+	public Activation GetActivation(){
+		return activation;
+	}
+	public void SetActivation(Activation activation){
+		this.activation = activation;
 	}
 	new public string GetName(){
 		return name;
