@@ -6,11 +6,12 @@ using UnityEngine.UI;
 
 public class Unit : Person{
 	Person person;
+	public UnitUI unitUI;
 	public enum Sides { Ally, Enemy };
 	Sides side;
 	public enum Activation { Behaveable, AlreadyBehaved, Deactivated };
 	Activation activation;
-	public UnitUI unitUI;
+	List<Buff> buffs;
 
 	public Unit(Person person){
 		this.person = person;
@@ -24,8 +25,17 @@ public class Unit : Person{
 		AddStat ("운", 100, 1, person.GetStat ("행운"));
 
 		magics = person.GetMagics();
+		buffs = new List<Buff> ();
 	}
 
+	//아래 함수 개씹구리다 언젠간 고치길
+	new public int GetStat(string name){
+		double realValue = stats[name];
+		foreach (Buff buff in buffs) {
+			realValue = buff.ApplyBuff (name, realValue);
+		}
+		return GetStatValueInLimit(name, realValue);
+	}
 	public void CastMagic(Magic magic, Unit target){
 		magic.Cast (this, target);
 	}

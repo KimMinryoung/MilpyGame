@@ -55,8 +55,8 @@ public class Person{
 	public string GetName(){
 		return name;
 	}
-	public int GetStat (string statName){
-		return stats [statName];
+	public int GetStat (string name){
+		return stats [name];
 	}
 	public Dictionary<string, int> GetStats(){
 		return stats;
@@ -77,7 +77,7 @@ public class Person{
 
 	protected void ChangeStat(string targetStat, int change){
 		stats [targetStat] += change;
-		MakeStatInLimit (targetStat);
+		stats [targetStat] = GetStatValueInLimit (targetStat, stats [targetStat]);
 	}
 	private string ChangeStatAndGetMessage(string targetStat, int change){
 		int prevStat = stats [targetStat];
@@ -114,10 +114,10 @@ public class Person{
 		}
 	}
 
-	private int MakeStatInLimit(string statName){
-		int prevStatValue = stats [statName];
-		stats [statName] = (int)Util.Max (stats [statName], statMinLimits [statName]);
-		stats [statName] = (int)Util.Min (stats [statName], statMaxLimits [statName]);
-		return stats [statName] - prevStatValue;
+	protected int GetStatValueInLimit(string statName, double value){
+		double realValue = value;
+		realValue = (int)Util.Max (realValue, statMinLimits [statName]);
+		realValue = (int)Util.Min (realValue, statMaxLimits [statName]);
+		return (int)realValue;
 	}
 }
