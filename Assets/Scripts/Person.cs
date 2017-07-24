@@ -86,18 +86,29 @@ public class Person {
 		statBar.value = stats [name];
 	}
 
-	protected string ChangeStatAndUpdateStatBarAndGetMessage(string targetStat, int change){
-		int prevStat = stats [targetStat];
+	private void ChangeStat(string targetStat, int change){
 		stats [targetStat] += change;
 		MakeStatInLimit (targetStat);
-
+	}
+	private void ChangeStatAndUpdateStatBar(string targetStat, int change){
+		int prevStat = stats [targetStat];
+		ChangeStat (targetStat, change);
 		UpdateStatBar (targetStat);
-
+	}
+	private string ChangeStatAndUpdateStatBarAndGetMessage(string targetStat, int change){
+		int prevStat = stats [targetStat];
+		ChangeStat (targetStat, change);
+		UpdateStatBar (targetStat);
 		int realChange = stats [targetStat] - prevStat;
 		string message = Util.AValueOfSomethingChangedMessage (realChange, targetStat, name);
 		return message;
 	}
-
+	public void ChangeStats(Dictionary<string, int> statChangesList){
+		List<string> messages=new List<string>();
+		foreach(var statChange in statChangesList){
+			ChangeStatAndUpdateStatBar (statChange.Key, statChange.Value);
+		}
+	}
 	public void ChangeStatsAndAddMessages(Dictionary<string, int> statChangesList){
 		List<string> messages=new List<string>();
 		string message;
