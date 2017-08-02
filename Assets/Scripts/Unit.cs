@@ -66,6 +66,9 @@ public class Unit : Person{
 	new public List<Magic> GetMagics(){
 		return magics;
 	}
+	public void AddBuff(Buff buff){
+		buffs.Add (buff);
+	}
 	public void CreateHPAndMPStatBars (){
 		List<string> statNames = new List<string> ();
 		statNames.Add ("HP");
